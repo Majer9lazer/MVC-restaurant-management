@@ -1,0 +1,47 @@
+﻿@using RestaurantManagement.DAL.Model;
+@model List<Item>
+@{
+    ViewBag.Title = "ListMenu";
+}
+
+<h2>ListMenu</h2>
+@if (ViewBag.state == 0)
+{
+    <div class="alert alert-success alert-dismissible fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @ViewBag.message
+    </div>
+}
+else if (ViewBag.state == 1)
+{
+    <div class="alert alert-danger alert-dismissible fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @ViewBag.message
+    </div>
+}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+    @{
+       
+    }
+    @foreach (Item menu in Model)
+    {
+        <tr
+            @*@if (ViewBag.Sate == 0 && Model.Last().itemid == menu.itemid)
+            {<text> style="background-color: green"</text>}*@>
+            <td>@menu.itemid</td>
+            <td>@menu.itemName</td>
+            <td>@menu.itemDesc</td>
+            <td>@($"{menu.cost:##.000}")</td>
+        </tr>
+    }
+    </tbody>
+</table>

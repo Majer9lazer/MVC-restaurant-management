@@ -1,0 +1,50 @@
+﻿@model RestaurantManagement.DAL.Model.Item
+@{
+    ViewBag.Title = "Index";
+    int state = ViewBag.state;
+    string message = ViewBag.message;
+}
+<h1>Добавление меню</h1>
+@if (state == 0)
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @message
+    </div>
+}
+else if(state==1)
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @message
+    </div>
+}
+@using (Html.BeginForm("SaveMenu", "RestaurantMenu"))
+{
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <label class="control-label">
+                    Наименование
+                </label>
+                @Html.TextBoxFor(t => Model.itemName, new { @class = "form-control" })
+                <label class="control-label">
+                    Описание
+                </label>
+                @Html.TextBoxFor(t => Model.itemDesc, new { @class = "form-control" })
+                <label class="control-label">
+                    Цена
+                </label>
+                @Html.TextBoxFor(t => Model.cost, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info" type="submit">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+}
+
