@@ -26,22 +26,28 @@ else if (ViewBag.state == 1)
             <th>Наименование</th>
             <th>Описание</th>
             <th>Цена</th>
+            <th>Действие</th>
         </tr>
     </thead>
     <tbody>
-    @{
-       
-    }
-    @foreach (Item menu in Model)
-    {
-        <tr
-            @*@if (ViewBag.Sate == 0 && Model.Last().itemid == menu.itemid)
-            {<text> style="background-color: green"</text>}*@>
-            <td>@menu.itemid</td>
-            <td>@menu.itemName</td>
-            <td>@menu.itemDesc</td>
-            <td>@($"{menu.cost:##.000}")</td>
-        </tr>
-    }
+        @{
+            int lastId = Model.Last().itemid;
+        }
+        @foreach (Item menu in Model)
+        {
+            <tr @if (lastId == menu.itemid) { <text>
+              style="background-color:lightgreen" title="Последняя добавленная запись"
+                </text>  }>
+                <td style="vertical-align: middle;text-align:center">@menu.itemid</td>
+                <td style="vertical-align: middle;text-align:center">@menu.itemName</td>
+                <td style="vertical-align: middle;text-align:center" >@menu.itemDesc</td>
+                <td style="vertical-align: middle;text-align:center">@($"{menu.cost:##.000}")</td>
+                <td style="vertical-align: middle;text-align:center">
+                    <a href="@Url.Action("DeleteMenu", "RestaurantMenu", new{menuItemId=menu.itemid})" title="Удалить текущую запись" class="btn btn-danger">
+                        Удалить
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -51,12 +51,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lang\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Comment.cs" />
+    <Compile Include="Model\EatType.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Reservation.cs" />
     <Compile Include="Model\RestaurantManagement_DB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Lang\Resource.en.resx" />
+    <EmbeddedResource Include="Lang\Resource.kk.resx" />
+    <EmbeddedResource Include="Lang\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>

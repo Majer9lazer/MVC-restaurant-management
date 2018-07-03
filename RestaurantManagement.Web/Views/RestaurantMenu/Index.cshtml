@@ -5,6 +5,7 @@
     string message = ViewBag.message;
 }
 <h1>Добавление меню</h1>
+@Html.ValidationSummary()
 @if (state == 0)
 {
     <div class="alert alert-success alert-dismissible">

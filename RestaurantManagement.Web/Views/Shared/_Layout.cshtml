@@ -22,10 +22,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Добавить тип еды", "EatTypes", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Добавить пункт меню", "Index", "RestaurantMenu")</li>
                     <li>@Html.ActionLink("Список меню", "ListMenu", "RestaurantMenu")</li>
+                    <li>
+                        <a href="@Url.Action("ChangeCulture", "Home", new {lang = "ru"})">
+                            Русский
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ChangeCulture", "Home", new {lang = "en"})">
+                            Английский
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ChangeCulture", "Home", new {lang = "kk"})">
+                            Казахский
+                        </a>
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

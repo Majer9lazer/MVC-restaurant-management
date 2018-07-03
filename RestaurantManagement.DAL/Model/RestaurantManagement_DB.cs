@@ -14,6 +14,8 @@ namespace RestaurantManagement.DAL.Model
 
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<EatType> EatTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

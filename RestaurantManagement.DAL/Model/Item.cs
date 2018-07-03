@@ -9,14 +9,18 @@ namespace RestaurantManagement.DAL.Model
     [Table("Item")]
     public partial class Item
     {
+
         public int itemid { get; set; }
 
+        [Required]
         [StringLength(250)]
         public string itemName { get; set; }
 
+        [Required]
         [StringLength(250)]
         public string itemDesc { get; set; }
 
+        [Required]
         [Column(TypeName = "money")]
         public decimal? cost { get; set; }
     }
