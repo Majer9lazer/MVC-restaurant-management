@@ -1,0 +1,92 @@
+﻿@using RestaurantManagement.DAL.Model
+@model IEnumerable<RestaurantManagement.DAL.Model.Emploee>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-bordered table-hover table-dark">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Job.Jobtype)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fullname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Education)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Experience)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phonenumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Skills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emppassword)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (Emploee item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Job.Jobtype)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Education)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Experience)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phonenumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Skills)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Emppassword)
+            </td>
+            <td>
+                <div class="btn-toolbar" role="group">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-primary", @style = "margin:3px" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-light", @style = "margin:3px" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-danger", @style = "margin:3px" })
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>

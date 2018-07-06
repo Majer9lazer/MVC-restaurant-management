@@ -7,14 +7,14 @@
 <h2>ListMenu</h2>
 @if (ViewBag.state == 0)
 {
-    <div class="alert alert-success alert-dismissible fade in">
+    <div class="alert alert-success alert-dismissible fade show">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @ViewBag.message
     </div>
 }
 else if (ViewBag.state == 1)
 {
-    <div class="alert alert-danger alert-dismissible fade in">
+    <div class="alert alert-danger alert-dismissible fade show">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @ViewBag.message
     </div>
@@ -22,29 +22,35 @@ else if (ViewBag.state == 1)
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Номер</th>
-            <th>Наименование</th>
-            <th>Описание</th>
-            <th>Цена</th>
-            <th>Действие</th>
+            <th style="vertical-align: middle;text-align:center">Номер</th>
+            <th style="vertical-align: middle;text-align:center">Наименование</th>
+            <th style="vertical-align: middle;text-align:center">Описание</th>
+            <th style="vertical-align: middle;text-align:center">Цена</th>
+            <th style="vertical-align: middle;text-align:center">Действие</th>
         </tr>
     </thead>
     <tbody>
         @{
-            int lastId = Model.Last().itemid;
+            int lastId = 0;
+            if (Model.Any())
+            {
+                lastId = Model.Last().Itemid;
+            }
         }
         @foreach (Item menu in Model)
         {
-            <tr @if (lastId == menu.itemid) { <text>
-              style="background-color:lightgreen" title="Последняя добавленная запись"
-                </text>  }>
-                <td style="vertical-align: middle;text-align:center">@menu.itemid</td>
-                <td style="vertical-align: middle;text-align:center">@menu.itemName</td>
-                <td style="vertical-align: middle;text-align:center" >@menu.itemDesc</td>
-                <td style="vertical-align: middle;text-align:center">@($"{menu.cost:##.000}")</td>
-                <td style="vertical-align: middle;text-align:center">
-                    <a href="@Url.Action("DeleteMenu", "RestaurantMenu", new{menuItemId=menu.itemid})" title="Удалить текущую запись" class="btn btn-danger">
-                        Удалить
+            <tr @if (lastId == menu.Itemid) { <text>
+                style="background-color:rgb(50, 204, 49)" title="Последняя добавленная запись"
+                </text> }>
+                <td style="vertical-align: middle;text-align:center">@menu.Itemid</td>
+                <td style="vertical-align: middle;text-align:center">@menu.ItemName</td>
+                <td style="vertical-align: middle;text-align:center">@menu.ItemDesc</td>
+                <td style="vertical-align: middle;text-align:center">@($"{menu.Cost:##.000}")</td>
+                <td style="vertical-align: middle;text-align:center" >
+                    <a href="@Url.Action("DeleteMenu", "RestaurantMenu", new{menuItemId=menu.Itemid})" 
+                       title="Удалить текущую запись"
+                       class="btn btn-danger">
+                       Удалить
                     </a>
                 </td>
             </tr>

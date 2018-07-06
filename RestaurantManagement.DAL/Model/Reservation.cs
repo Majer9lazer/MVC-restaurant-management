@@ -10,16 +10,17 @@ namespace RestaurantManagement.DAL.Model
     public partial class Reservation
     {
         public int ReservationId { get; set; }
-
+        [Required(ErrorMessage = "Guest name required")]
         [StringLength(250)]
-        public string guestName { get; set; }
-
+        public string GuestName { get; set; }
+        [Required]
         [StringLength(250)]
-        public string noofguests { get; set; }
+        public string Noofguests { get; set; }
+        [Required]
+        public int? Typeid { get; set; }
 
-        public int? typeid { get; set; }
+        public Guid Guestid { get; set; }
 
-        [StringLength(10)]
-        public string guestid { get; set; }
+        public virtual EatType EatType { get; set; }
     }
 }

@@ -1,0 +1,47 @@
+﻿@using RestaurantManagement.DAL.Model
+@model List<EatType>
+
+@{
+    ViewBag.Title = "EatTypeList";
+    string message = ViewBag.Message;
+}
+
+<h2>Список типов еды</h2>
+<hr />
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@message</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<p>
+    @Html.ActionLink("Создать новый тип еды", "EatTypes", "Home", htmlAttributes: new { @class = "btn btn-outline-info" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @if (Model.Any())
+            {
+                @Html.DisplayNameFor(model => model.First().EatTypeName)
+            }
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (EatType item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EatTypeName)
+            </td>
+            <td>
+                @Html.ActionLink("Подкорректировать", "EditEatType", "Home", new {eatTypeId = item.TypeId }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Удалить", "DeleteEatType", new {eatTypeId = item.TypeId }, htmlAttributes: new { @class = "btn btn-outline-danger" })
+            </td>
+        </tr>
+    }
+
+</table>

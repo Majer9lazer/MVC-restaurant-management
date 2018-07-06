@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,9 +14,10 @@ namespace RestaurantManagement.Web.Controllers
     {
         private readonly RestaurantManagement_DB _db = new RestaurantManagement_DB();
         private Logger _logger = LogManager.GetCurrentClassLogger();
-        public ActionResult Index()
+        public ActionResult Index(string message)
         {
             ViewBag.Title = "RestaurantManagement - Home Page";
+            ViewBag.Message = message;
             return View();
         }
 
@@ -49,21 +51,78 @@ namespace RestaurantManagement.Web.Controllers
         {
             return View();
         }
-        public ActionResult EatTypes(EatType eatType)
+        public ActionResult EatTypes()
         {
-            if (ModelState.IsValid)
-            {
-                try
+            return View();
+        }
+        public ActionResult AddEatType(EatType eatType)
+        {
+            if (string.IsNullOrEmpty(eatType.EatTypeName))
+                return RedirectToAction("EatTypeList", "Home",
+                    new { message = "Вы не заполнили имя." });
+            try
                 {
-                    _db.EatTypes.Add(eatType);
+                    if (eatType.TypeId == 0)
+                    {
+                        _db.EatTypes.Add(eatType);
+                        _db.SaveChanges();
+                        return RedirectToAction("EatTypeList", "Home",
+                            new { message = "Данные были добавлены успешно." });
+                    }
+                    EatType findedElement= _db.EatTypes.Find(eatType.TypeId);
+                 
+                    if (findedElement == null)
+                        return RedirectToAction("EatTypeList", "Home",
+                            new { message = "Данные пришли пустыми." });
+
+                    findedElement.EatTypeName = eatType.EatTypeName;
+                    _db.Entry(findedElement).State = EntityState.Modified;
                     _db.SaveChanges();
+                    return RedirectToAction("EatTypeList", "Home",
+                        new { message = "Данные были изменены успешно." });
+
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e.ToString);
+                    return RedirectToAction("EatTypeList", "Home", new { message = e.ToString() });
                 }
-            }
-            return View();
         }
+
+        public ActionResult EditEatType(int eatTypeId)
+        {
+            EatType findedElement = _db.EatTypes.Find(eatTypeId);
+            if (findedElement != null)
+                return View("EatTypes", findedElement);
+            else
+                return RedirectToAction("EatTypeList", "Home", new {message = "Данные пришли пустыми"});
+        }
+        public ActionResult EatTypeList(string message)
+        {
+            ViewBag.Message = message;
+            return View(_db.EatTypes.ToList());
+        }
+
+        public ActionResult DeleteEatType(int eatTypeId = 0)
+        {
+            EatType elementToDelete = _db.EatTypes.Find(eatTypeId);
+            if (elementToDelete != null)
+            {
+                try
+                {
+                    _db.EatTypes.Remove(elementToDelete);
+                    _db.SaveChanges();
+                    return RedirectToAction("EatTypeList", "Home", new { message = "Удалено успешено." });
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("EatTypeList", "Home", new { message = e.ToString() });
+                }
+
+            }
+
+            return RedirectToAction("EatTypeList", "Home", new { message = "Данные пришли пустыми." });
+        }
+
     }
 }

@@ -1,0 +1,60 @@
+﻿@model RestaurantManagement.DAL.Model.Reservation
+
+@{
+    ViewBag.Title = "ReserveTable";
+}
+
+@using (Html.BeginForm("ReserveTable", "RestaurantMenu"))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        <h4>Бронирование столика</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.GuestName, "На кого заказываем", htmlAttributes: new { @class = "col-form-label col-md-4" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GuestName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GuestName, "Обязательно для заполнения", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Noofguests, "Количество гостей", htmlAttributes: new { @class = "col-form-label col-md-4" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Noofguests, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.Noofguests, "Обязательно для заполнения", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Typeid, "Что вы хотите покушать", htmlAttributes: new { @class = "col-form-label col-md-4" })
+            <div class="col-md-10">
+                @Html.DropDownList("typeid", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Typeid, "Обязательно для заполнения", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label col-md-4">На ваш Email будет выслано письмо о заказе</label>
+            <div class="col-md-10">
+                @Html.TextBox("email", null, htmlAttributes: new { @class = "form-control", @placeholder = "exapmle@gmail.com" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-outline-secondary">
+                    Забронировать
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                @Html.ActionLink("Обратно домой", "Index", "Home", null, htmlAttributes: new { @class = "badge badge-secondary" })
+            </div>
+
+        </div>
+
+    </div>
+}
+

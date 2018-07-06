@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
+using NLog.Fluent;
 using RestaurantManagement.DAL.Model;
 
 namespace RestaurantManagement.Web.Controllers
@@ -19,7 +20,7 @@ namespace RestaurantManagement.Web.Controllers
         public ActionResult SaveMenu(Item menu)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Index", "RestaurantMenu", new { state = 1, message = "Вы заполнили не все поля."});
+                return RedirectToAction("Index", "RestaurantMenu", new { state = 1, message = "Вы заполнили не все поля." });
             try
             {
                 _restaurantManagementDb.Items.Add(menu);
@@ -36,7 +37,7 @@ namespace RestaurantManagement.Web.Controllers
         {
             ViewBag.state = state;
             ViewBag.message = message;
-            return View(_restaurantManagementDb.Items.OrderBy(o => o.itemid).ToList());
+            return View(_restaurantManagementDb.Items.OrderBy(o => o.Itemid).ToList());
         }
 
         public ActionResult DeleteMenu(int menuItemId = 0)
@@ -72,6 +73,31 @@ namespace RestaurantManagement.Web.Controllers
 
         }
 
-       
+        public ActionResult ReserveTable(Reservation reservation, string email)
+        {
+            if (ModelState.IsValid)
+            {
+                reservation.Guestid = Guid.NewGuid();
+                try
+                {
+                    _restaurantManagementDb.Reservations.Add(reservation);
+                    _restaurantManagementDb.SaveChanges();
+                    return RedirectToAction("Index", "Home", new { message = "Ваша заявка принята, ждите ответа от смс" });
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("Index", "Home", new { message = e.ToString() });
+                }
+            }
+            ViewData["typeid"] = _restaurantManagementDb.EatTypes.Select(s => new SelectListItem
+            {
+                Value = s.TypeId.ToString(),
+                Text = s.EatTypeName
+            }).ToList();
+
+
+            return View();
+        }
+
     }
 }

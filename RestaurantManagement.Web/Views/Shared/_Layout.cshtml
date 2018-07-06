@@ -4,29 +4,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+    <script src="/Scripts/jquery-ui-1.12.1.min.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Добавить тип еды", "EatTypes", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Добавить пункт меню", "Index", "RestaurantMenu")</li>
-                    <li>@Html.ActionLink("Список меню", "ListMenu", "RestaurantMenu")</li>
-                    <li>
+    <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="False" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarToggler">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Список типов еды", "EatTypeList", "Home", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Добавить пункт меню", "Index", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Список меню", "ListMenu", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Сделать заказ", "ReserveTable", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Зарегистрироваться как сотрудник", "Index", "Emploees", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Войти как сотрудник", "ReserveTable", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                <!-- #region ChangeCulture -->
+                @*<li>
                         <a href="@Url.Action("ChangeCulture", "Home", new {lang = "ru"})">
                             Русский
                         </a>
@@ -40,22 +41,25 @@
                         <a href="@Url.Action("ChangeCulture", "Home", new {lang = "kk"})">
                             Казахский
                         </a>
-                    </li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+                    </li>*@
+                <!-- #endregion -->
+            </ul>
+            @*@Html.Partial("_LoginPartial")*@
         </div>
-    </div>
-    <div class="container body-content">
+    </nav>
+    <div class="container-fluid body-content">
+        <br style="clear: both" />
+        <br style="clear: both" />
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Egor Best ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Egor Best Application</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+   
     @RenderSection("scripts", required: false)
 </body>
 </html>

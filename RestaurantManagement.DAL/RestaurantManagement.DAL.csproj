@@ -58,7 +58,9 @@
     </Compile>
     <Compile Include="Model\Comment.cs" />
     <Compile Include="Model\EatType.cs" />
+    <Compile Include="Model\Emploee.cs" />
     <Compile Include="Model\Item.cs" />
+    <Compile Include="Model\Job.cs" />
     <Compile Include="Model\Reservation.cs" />
     <Compile Include="Model\RestaurantManagement_DB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
