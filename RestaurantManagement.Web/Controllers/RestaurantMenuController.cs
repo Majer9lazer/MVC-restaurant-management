@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using NLog.Fluent;
@@ -32,7 +34,6 @@ namespace RestaurantManagement.Web.Controllers
                 return RedirectToAction("Index", "RestaurantMenu", new { state = 1, message = e.ToString() });
             }
         }
-
         public ActionResult ListMenu(int state = -1, string message = "")
         {
             ViewBag.state = state;
@@ -73,7 +74,7 @@ namespace RestaurantManagement.Web.Controllers
 
         }
 
-        public ActionResult ReserveTable(Reservation reservation, string email)
+        public async Task<ActionResult> ReserveTable(Reservation reservation, string email)
         {
             if (ModelState.IsValid)
             {
@@ -81,8 +82,20 @@ namespace RestaurantManagement.Web.Controllers
                 try
                 {
                     _restaurantManagementDb.Reservations.Add(reservation);
-                    _restaurantManagementDb.SaveChanges();
-                    return RedirectToAction("Index", "Home", new { message = "Ваша заявка принята, ждите ответа от смс" });
+                    await _restaurantManagementDb.SaveChangesAsync();
+
+
+                    string message = await _restaurantManagementDb.SendMessage(email, $"Уважаемый(ая) {reservation.GuestName}\n" +
+                                                                                      $"Ваш уникальный идентификатор пользователя - {reservation?.Guestid}\n" +
+                                                                                                      $"Вы можете посетить наше заведение , надеюсь\n" +
+                                                                                      $"Вы заказали - " +
+                                                                                      $"{_restaurantManagementDb.EatTypes.FirstOrDefault(f => f.TypeId == reservation.Typeid)?.EatTypeName}" +
+                                                                                      $" на {reservation.Noofguests} человек(а)");
+                    return RedirectToAction("Index", "Home", new
+                    {
+                        message = "Ваша заявка принята, ждите ответа от смс\n" +
+                                  $"Состояние отправки сообщения : {message}"
+                    });
                 }
                 catch (Exception e)
                 {

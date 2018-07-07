@@ -212,6 +212,7 @@
     <Compile Include="Controllers\EmploeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\RestaurantMenuController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -383,6 +384,9 @@
     <Content Include="Views\Emploees\Details.cshtml" />
     <Content Include="Views\Emploees\Edit.cshtml" />
     <Content Include="Views\Emploees\Index.cshtml" />
+    <Content Include="Views\Emploees\LoginIndex.cshtml" />
+    <Content Include="Views\Reservation\Index.cshtml" />
+    <Content Include="Views\Reservation\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

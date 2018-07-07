@@ -1,0 +1,30 @@
+﻿@using RestaurantManagement.DAL.Model
+@model IEnumerable<Reservation>
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayName("Название типа еды")
+        </th>
+        <th>
+            @Html.DisplayName("Имя гостя")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (Reservation item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EatType.EatTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GuestName)
+            </td>
+            <td>
+                @Html.ActionLink("Просмотреть детально", "Details", new { id = item.ReservationId },htmlAttributes:new{@class="btn btn-outline-info"})
+            </td>
+        </tr>
+    }
+
+</table>

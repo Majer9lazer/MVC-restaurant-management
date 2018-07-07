@@ -4,10 +4,8 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Emploee</h4>
+    <h4>Информация о работнике</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -93,6 +91,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Empid }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Изменить", "Edit", new { id = Model.Empid },htmlAttributes:new{@class="btn btn-outline-success"}) 
+    @Html.ActionLink("Обратно к списку", "Index",null, htmlAttributes: new { @class = "btn btn-outline-primary" })
 </p>

@@ -1,7 +1,9 @@
 ﻿@using RestaurantManagement.DAL.Model;
+@using RestaurantManagement.Web.Controllers
 @model List<Item>
 @{
     ViewBag.Title = "ListMenu";
+
 }
 
 <h2>ListMenu</h2>
@@ -46,10 +48,24 @@ else if (ViewBag.state == 1)
                 <td style="vertical-align: middle;text-align:center">@menu.ItemName</td>
                 <td style="vertical-align: middle;text-align:center">@menu.ItemDesc</td>
                 <td style="vertical-align: middle;text-align:center">@($"{menu.Cost:##.000}")</td>
-                <td style="vertical-align: middle;text-align:center" >
+                <td style="vertical-align: middle;text-align:center">
                     <a href="@Url.Action("DeleteMenu", "RestaurantMenu", new{menuItemId=menu.Itemid})" 
-                       title="Удалить текущую запись"
-                       class="btn btn-danger">
+                           title="@if (EmploeesController.IsLoggedIn)
+                                  {
+                                      @:Удалить текущую запись
+                                  }
+                                  else
+                                  {
+                                      @:Вы не можете ничего сделать до тех пор пока не войдете в систему
+                                  }"
+                       class="btn btn-danger  @if (!EmploeesController.IsLoggedIn)
+                                             {
+                                                 @:disabled
+                                             }
+                                             else
+                                             {
+                                                 @:active
+                                             }">
                        Удалить
                     </a>
                 </td>

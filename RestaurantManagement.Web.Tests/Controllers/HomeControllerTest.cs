@@ -13,13 +13,13 @@ namespace RestaurantManagement.Web.Tests.Controllers
     public class HomeControllerTest
     {
         [TestMethod]
-        public void Index()
+        public void Index(string message, bool? isLogOff)
         {
             // Arrange
             HomeController controller = new HomeController();
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            ViewResult result = controller.Index(message,isLogOff) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

@@ -1,13 +1,11 @@
 namespace RestaurantManagement.DAL.Model
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("Emploee")]
-    public partial class Emploee
+    public class Emploee
     {
         [Key]
         public int Empid { get; set; }
@@ -30,7 +28,6 @@ namespace RestaurantManagement.DAL.Model
 
         [StringLength(1000)]
         public string Skills { get; set; }
-
         [StringLength(100)]
         public string Username { get; set; }
 

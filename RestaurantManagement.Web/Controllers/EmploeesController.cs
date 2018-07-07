@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using RestaurantManagement.DAL.Model;
 
@@ -13,13 +9,14 @@ namespace RestaurantManagement.Web.Controllers
 {
     public class EmploeesController : Controller
     {
-        private RestaurantManagement_DB db = new RestaurantManagement_DB();
-
+        private readonly RestaurantManagement_DB _db = new RestaurantManagement_DB();
+        public static Emploee StaticEmployee = new Emploee();
+        public static bool IsLoggedIn;
         // GET: Emploees
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string message)
         {
-            var emploees = db.Emploees.Include(e => e.Job);
-            return View(await emploees.ToListAsync());
+            ViewBag.Message = message;
+            return View(await _db.Emploees.Include(e => e.Job).ToListAsync());
         }
 
         // GET: Emploees/Details/5
@@ -29,7 +26,7 @@ namespace RestaurantManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Emploee emploee = await db.Emploees.FindAsync(id);
+            Emploee emploee = await _db.Emploees.FindAsync(id);
             if (emploee == null)
             {
                 return HttpNotFound();
@@ -40,7 +37,7 @@ namespace RestaurantManagement.Web.Controllers
         // GET: Emploees/Create
         public ActionResult Create()
         {
-            ViewBag.Jobid = new SelectList(db.Jobs, "Jobid", "Jobtype");
+            ViewBag.Jobid = new SelectList(_db.Jobs, "Jobid", "Jobtype");
             return View();
         }
 
@@ -53,12 +50,35 @@ namespace RestaurantManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Emploees.Add(emploee);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (_db.Emploees.Any(f => f.Username == emploee.Username))
+                {
+                    emploee = _db.Emploees.FirstOrDefault(f =>
+                        f.Username == emploee.Username && f.Emppassword == emploee.Emppassword);
+                    string mailMessage = await _db.SendMessage(emploee?.Username, $"Ваш логин : {emploee?.Username}\n" +
+                                                                                 $"Пароль : {emploee?.Emppassword}");
+                    return RedirectToAction("Index", "Home", new
+                    {
+                        message = $"Уважаемый(ая) {emploee?.Fullname}.\n" +
+                                  $"Такой аккаунт с логином ({emploee?.Username}) уже существует\n" +
+                                  $"Попробуйте войти снова\n" +
+                                  $"На вашу почту был выслан ваш пароль\n" +
+                                  $"Информация по состоянию отправки сообщения - {mailMessage}"
+                    });
+                }
+                _db.Emploees.Add(emploee);
+                await _db.SaveChangesAsync();
+                string message = await _db.SendMessage(emploee.Username, $"Уважаемый(ая) {emploee.Fullname}. Вы хотели у нас работать? \n" +
+                                                                        $"Тогда попытайтесь войти в нашу систему , и получите некотрые привелегии\n" +
+                                                                        $"Ваш логин : {emploee.Username}\n" +
+                                                                        $"Ваш пароль : {emploee.Emppassword}");
+                return RedirectToAction("Index", "Home", new
+                {
+                    message = $"Уважаемый(ая) {emploee.Fullname}. Ваша заявка принята , ожидайте ответа по смс.\n" +
+                                                                         $"Информация по состоянию отправки сообщения - {message}"
+                });
             }
 
-            ViewBag.Jobid = new SelectList(db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
+            ViewBag.Jobid = new SelectList(_db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
             return View(emploee);
         }
 
@@ -69,12 +89,12 @@ namespace RestaurantManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Emploee emploee = await db.Emploees.FindAsync(id);
+            Emploee emploee = await _db.Emploees.FindAsync(id);
             if (emploee == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Jobid = new SelectList(db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
+            ViewBag.Jobid = new SelectList(_db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
             return View(emploee);
         }
 
@@ -87,11 +107,15 @@ namespace RestaurantManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(emploee).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(emploee).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                await _db.SendMessage(emploee.Username, $"Уважаемый(ая) {emploee.Fullname}\n" +
+                                                        $"Ваши данные были изменены\n" +
+                                                        $"Ваш логин - {emploee.Username}\n" +
+                                                        $"Ваш пароль - {emploee.Emppassword}");
                 return RedirectToAction("Index");
             }
-            ViewBag.Jobid = new SelectList(db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
+            ViewBag.Jobid = new SelectList(_db.Jobs, "Jobid", "Jobtype", emploee.Jobid);
             return View(emploee);
         }
 
@@ -102,7 +126,7 @@ namespace RestaurantManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Emploee emploee = await db.Emploees.FindAsync(id);
+            Emploee emploee = await _db.Emploees.FindAsync(id);
             if (emploee == null)
             {
                 return HttpNotFound();
@@ -115,17 +139,62 @@ namespace RestaurantManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Emploee emploee = await db.Emploees.FindAsync(id);
-            db.Emploees.Remove(emploee);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            Emploee emploee = await _db.Emploees.FindAsync(id);
+            if (emploee == null)
+                return HttpNotFound();
+
+            _db.Emploees.Remove(emploee);
+            await _db.SaveChangesAsync();
+            string message;
+            if (StaticEmployee.Username == emploee.Username)
+            {
+                message = await _db.SendMessage(emploee.Username, $"Уважаемый(ая) {emploee.Fullname}\n" +
+                                                                  "Вы решили уволиться по собственному желанию\n" +
+                                                                  "Тем самым вы не имеете доступа к нашему сервису. ");
+                return RedirectToAction("Index", new
+                {
+                    message = $"Вы сами себя удадили тем самым уволили))\n" +
+                              $"Состояние доставки сообщения - {message} "
+                });
+            }
+            message = await _db.SendMessage(emploee.Username, $"Вас уволил человек - {StaticEmployee.Fullname} который вошел в нашу систему\n" +
+                                                              $"Напишите ему на его почту. Его почта : {StaticEmployee.Username}");
+            return RedirectToAction("Index", new
+            {
+                message = "Вы либо кого-то уволили.\n" + "Либо просто удалили.\n" +
+                          "И, то, что, вы сделали будет отправлено этому пользователю на почту.\n" +
+                          $"Состояние доставки сообщения - {message} "
+            });
+        }
+        [HttpPost]
+        public async Task<ActionResult> Login(string login, string password)
+        {
+            Emploee emploee = await _db.Emploees.FirstOrDefaultAsync(w => w.Username == login && w.Emppassword == password);
+            if (emploee != null)
+            {
+                IsLoggedIn = true;
+                 await _db.SendMessage(emploee.Username, $"Вы зашли в систему. Пользуйтесь сервисом.\n" +
+                                                         $"Ну я надеюсь , что вы всё правильно сделали.\n" +
+                                                         $"Точнее не я , а \"наша команда\". ");
+                StaticEmployee = emploee;
+                return View("Details", emploee);
+            }
+            else
+            {
+                return RedirectToAction("Index","Home", new { message = "Скорее всего пароль не верный или логин" });
+            }
+
         }
 
+        public ActionResult LoginIndex()
+        {
+            return View();
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

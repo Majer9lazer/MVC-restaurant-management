@@ -1,0 +1,61 @@
+﻿@model RestaurantManagement.DAL.Model.Reservation
+
+<div>
+    <h4>Информация о заказе</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Название типа еды")
+        </dt>
+
+        <dd>
+            <h4>
+                <span class="badge badge-primary">
+                    @Html.DisplayFor(model => model.EatType.EatTypeName)
+                </span>
+            </h4>
+        </dd>
+
+        <dt>
+
+            @Html.DisplayName("Имя гостя")
+
+        </dt>
+
+        <dd>
+            <h4>
+                <span class="badge badge-primary">
+                    @Html.DisplayFor(model => model.GuestName)
+                </span>
+            </h4>
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Количество гостей")
+        </dt>
+
+        <dd>
+            <h5>
+                <span class="badge badge-primary">
+                    @Html.DisplayFor(model => model.Noofguests)
+                </span>
+            </h5>
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Уникальный идентификатор гостя")
+        </dt>
+
+        <dd>
+            <h4>
+                <span class="badge badge-warning">
+                    @Html.DisplayFor(model => model.Guestid)
+                </span>
+            </h4>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Обратно к списку", "Index", null, htmlAttributes: new { @class = "btn btn-outline-primary" })
+</p>

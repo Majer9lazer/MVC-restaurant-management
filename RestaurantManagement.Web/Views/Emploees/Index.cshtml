@@ -1,48 +1,60 @@
 ﻿@using RestaurantManagement.DAL.Model
-@model IEnumerable<RestaurantManagement.DAL.Model.Emploee>
+@model IEnumerable<Emploee>
 
 @{
     ViewBag.Title = "Index";
+    string message = ViewBag.Message;
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>
+            Внимание!
+        </strong>
+        @foreach (string s in message.Split('\n'))
+        {
+            <p>@s</p>
+        }
+    </div>
+}
 <table class="table table-bordered table-hover table-dark">
     <thead class="thead-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Job.Jobtype)
+                @Html.DisplayName("Должность")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fullname)
+                @Html.DisplayName("Фамилия Имя Отчество")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Dob)
+                @Html.DisplayName("Дата рождения")
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Education)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Experience)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phonenumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Skills)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Emppassword)
-            </th>
+            <!-- #region unnecessary information table header -->
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Education)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Experience)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phonenumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Skills)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Emppassword)
+                </th>*@
+            <!-- #endregion -->
             <th></th>
         </tr>
     </thead>
@@ -56,34 +68,36 @@
                 @Html.DisplayFor(modelItem => item.Fullname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Dob)
+                @($"{item.Dob:D}")
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Education)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Experience)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phonenumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Skills)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Emppassword)
-            </td>
+            <!-- #region unnecessary information -->
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Education)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Experience)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phonenumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Skills)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Emppassword)
+                </td>*@
+            <!-- #endregion -->
             <td>
                 <div class="btn-toolbar" role="group">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-primary", @style = "margin:3px" })
-                    @Html.ActionLink("Details", "Details", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-light", @style = "margin:3px" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-danger", @style = "margin:3px" })
+                    @Html.ActionLink("Изменить", "Edit", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+                    @Html.ActionLink("Просмотреть детали", "Details", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-light", @style = "margin-left:5px;margin-right:5px" })
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Empid }, htmlAttributes: new { @class = "btn btn-outline-danger" })
                 </div>
             </td>
         </tr>

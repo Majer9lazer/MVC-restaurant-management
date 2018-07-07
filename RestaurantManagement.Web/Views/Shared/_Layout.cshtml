@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using RestaurantManagement.Web.Controllers
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    <script src="/Scripts/jquery-ui-1.12.1.min.js"></script>
+    @*<script src="/Scripts/jquery-ui-1.12.1.min.js"></script>*@
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -17,15 +19,29 @@
         <div class="navbar-collapse collapse" id="navbarToggler">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
+                    @Html.ActionLink("Главная", "Index", "Home", null, new { @class = "nav-link" })
                 </li>
-                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Список типов еды", "EatTypeList", "Home", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Добавить пункт меню", "Index", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Контактны", "Contact", "Home", null, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Список меню", "ListMenu", "RestaurantMenu", null, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Сделать заказ", "ReserveTable", "RestaurantMenu", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Зарегистрироваться как сотрудник", "Index", "Emploees", null, new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Войти как сотрудник", "ReserveTable", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                @if (EmploeesController.IsLoggedIn)
+                {
+                    <li class="nav-item">@Html.ActionLink("Список типов еды", "EatTypeList", "Home", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Добавить пункт меню", "Index", "RestaurantMenu", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Показать список заявок", "Index", "Emploees", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Показать список заказов", "Index", "Reservation", null, new { @class = "nav-link" }) </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Выйти", "Index", "Home", new { message = "Вы вышли из приложения.\n" +
+                                                                               "Тем самым вам будут недоступны некоторые функции" ,isLogOff=true}, new { @class = "nav-link" })
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">@Html.ActionLink("Войти как сотрудник", "LoginIndex", "Emploees", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Зарегистрироваться как сотрудник", "Create", "Emploees", null, new { @class = "nav-link" })</li>
+
+                }
+
                 <!-- #region ChangeCulture -->
                 @*<li>
                         <a href="@Url.Action("ChangeCulture", "Home", new {lang = "ru"})">
@@ -58,8 +74,10 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/JQueryui/css")
     @Scripts.Render("~/bundles/bootstrap")
-   
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
