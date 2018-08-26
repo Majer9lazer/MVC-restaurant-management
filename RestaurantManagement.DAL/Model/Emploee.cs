@@ -37,5 +37,6 @@ namespace RestaurantManagement.DAL.Model
         public int? Jobid { get; set; }
 
         public virtual Job Job { get; set; }
+
     }
 }
